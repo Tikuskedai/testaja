@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Masuk dan Timer WIB</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 10px;
+            font-size: 16px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #timer {
+            font-size: 30px;
+            padding: 20px;
+            background-color: orange;
+            color: white;
+            width: 200px;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+        #formContainer {
+            display: block;
+        }
+        #timerContainer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Form Masuk -->
+    <div id="formContainer">
+        <h1>Masukkan Nama Anda</h1>
+        <table>
+            <tr>
+                <th>Nama</th>
+                <td><input type="text" id="inputName" placeholder="Masukkan Nama"></td>
+            </tr>
+        </table>
+        <br>
+        <button id="submitButton" onclick="submitForm()">Masuk</button>
+    </div>
+
+    <!-- Timer -->
+    <div id="timerContainer">
+        <h1 id="userName"></h1>
+        <p>Mohon tunggu sampai 15:27:</p>
+        <div id="timer"></div>
+    </div>
+
+    <script>
+        // Fungsi untuk menampilkan waktu WIB real-time
+        function startRealTimeClock() {
+            var targetHour = 15;  // Waktu target dalam format 24-jam
+            var targetMinute = 27; // Menit target
+
+            var clockInterval = setInterval(function() {
+                var now = new Date().toLocaleString("en-US", { timeZone: "Asia/Jakarta" });
+                var wibTime = new Date(now);
+
+                var hours = String(wibTime.getHours()).padStart(2, '0');
+                var minutes = String(wibTime.getMinutes()).padStart(2, '0');
+                var seconds = String(wibTime.getSeconds()).padStart(2, '0');
+
+                document.getElementById("timer").innerHTML = hours + ":" + minutes + ":" + seconds + " WIB";
+
+                // Cek apakah waktu sudah mencapai target (misalnya 15:27 WIB)
+                if (hours == targetHour && minutes == targetMinute) {
+                    clearInterval(clockInterval); // Hentikan interval setelah waktu tercapai
+                    window.location.href = "https://www.google.com"; // Arahkan ke link setelah waktu tercapai
+                }
+            }, 1000); // Update setiap 1 detik
+        }
+
+        // Fungsi untuk mengirim form dan menampilkan timer
+        function submitForm() {
+            var name = document.getElementById("inputName").value;
+
+            // Cek apakah nama sudah diisi
+            if (name) {
+                // Tampilkan nama user di halaman timer
+                document.getElementById("userName").innerText = "Selamat datang, " + name;
+
+                // Sembunyikan form, tampilkan timer
+                document.getElementById("formContainer").style.display = "none";
+                document.getElementById("timerContainer").style.display = "block";
+
+                // Mulai jam real-time WIB
+                startRealTimeClock();
+            } else {
+                alert("Silakan masukkan nama Anda.");
+            }
+        }
+    </script>
+
+</body>
+</html>
